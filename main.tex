@@ -1,0 +1,185 @@
+\documentclass[openany, a4, 11pt]{book}
+
+% Documentul va fi tradus in limba romana
+\usepackage[romanian]{babel}
+
+% Scriem cu diacritice... 
+\usepackage[utf8x]{inputenc}
+
+% Vom folosi si un appendix simplut
+\usepackage[page]{appendix}
+
+% Se importa si pachetul pentru URL-uri (acestea vor fi colorate cu albastru)
+\usepackage{hyperref}
+\usepackage[pdftex]{graphicx}    
+\usepackage{subfig}
+\usepackage{multicol}
+\usepackage{color}
+\usepackage{indentfirst}
+\usepackage{pifont}
+\usepackage[margin=2.8cm, vmargin={1.4in, 1.4in}]{geometry}
+% \usepackage[bindingoffset=0.2in, left=1.0in, right=1.0in]{geometry}
+
+% Pachetele necesare pentru crearea si afisarea formulelor matematice
+\usepackage{mathtools}
+
+% Folosim un pachet pentru antet si subsol
+% Micsoreaza fontul in fancyhdr pentru a nu mai exista overlay-uri
+\usepackage{fancyhdr, blindtext}
+\newcommand{\changefont}{%
+    \fontsize{9}{11}\selectfont
+}
+\fancyhf{}
+\fancyhead[LE,RO]{\changefont \slshape \rightmark}
+\fancyhead[RE,LO]{\changefont \slshape \leftmark}
+\fancyfoot[C]{\changefont \thepage}
+\pagestyle{fancy}
+
+% Pachetele necesare pentru listarea de cod sursa
+\usepackage{caption}
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Pachetele necesare pentru crearea unor casute cu diverse mesaje
+\usepackage{styles/boxes}
+
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{multirow}
+
+% Pachete necesare pentru desenarea unor figuri pe ecranul utilizatorului
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage{subfig}
+
+% Importam si pachetul necesar pentru QR code
+\usepackage[]{qrcode}
+
+\definecolor{gray}{RGB}{235,235,235}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\renewcommand*\lstlistingname{Cod sursă}
+
+% Numele paginii de Aneze din cuprins este redenumit
+\renewcommand{\appendixtocname}{Anexă}
+
+% Legaturile web vor fi colorate cu albastru
+\newcommand{\myhref}[3][blue]{\href{#2}{\color{#1}{#3}}}%
+
+% Alte modificari de configurare
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+\setlength{\headheight}{12pt}
+\setcounter{secnumdepth}{6}
+% Adancimea cuprinsului...
+\setcounter{tocdepth}{3}
+% Seteaza identarea unui paragraf
+\setlength{\parindent}{1cm}
+
+% Pentru cuprins se scoate culoarea si bordarea legaturilor
+\hypersetup{urlbordercolor={1 1 1}, linkbordercolor={1 1 1}, citebordercolor={1 1 1}}
+
+% De aici incepe documentul nostru...
+\begin{document}
+
+\newgeometry{margin=3cm}
+\begin{titlepage}
+
+% Titlul va aparea centrat
+\begin{center}
+ 
+\begin{figure}[htb]
+\center{
+\includegraphics[width=0.4 \textwidth]{images/logo.png}
+}
+\end{figure}
+\noindent{\rule{8cm}{0.4pt}}\\[0.3cm]
+\textsc{\Large Universitatea Politehnica București}\\[5.0cm]
+
+{\Huge Politica de securitate}\\[0.4cm]
+\textsc{\Large a platformei de forumuri\\ MyBB}\\[5.0cm]
+
+% Informatii despre autor si despre indrumator
+\begin{minipage}{0.5\textwidth}
+\begin{flushleft}
+\large{\textbf{Studenți}}\\
+\large{Ionuț-Cătălin Barbu\\Mihai Surdeanu}
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright}
+\large{\textbf{Îndrumător}}\\
+Omar-Salim Choudary\\
+\end{flushright}
+\end{minipage}\\[3.0cm]
+
+% Alte informatii aditionale?
+\noindent{\rule{8cm}{0.4pt}}\\[0.3cm] 
+{\large ianuarie 2016}\\[1cm] 
+
+\end{center}
+
+% Trecem la urmatoarea pagina...
+\end{titlepage}
+\restoregeometry
+
+% Setarile necesare pentru a include cod sursa in cadrul acestei documentatii
+\lstdefinestyle{customc}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegray},
+    keywordstyle=\color{green!40!black},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    numberstyle=\tiny\color{codegray},
+    identifierstyle=\color{blue},
+    belowcaptionskip=1\baselineskip,
+    breaklines=true,
+    language=C,
+    showstringspaces=false,
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+% Sectiunea "Abstract"
+\input{chapters/abstract.tex}
+
+% Se afiseaza si un cuprins avansat
+\tableofcontents
+
+% Pagina cu lista de figuri
+\renewcommand\listfigurename{Listă de figuri}
+\listoffigures
+
+% Sectiunea de introducere
+\input{chapters/introduction.tex}
+
+% Prezentarea detaliata a politicii curente
+\input{chapters/policy.tex}
+
+% Posibile imbunatatiri ce pot fi realizate
+\input{chapters/improvements.tex}
+
+% Posibile imbunatatiri ce pot fi realizate
+\input{chapters/conclusions.tex}
+
+% Sectiunea de referinte va fi mereu pe o alta pagina
+\newpage
+
+% Avem si o scurta sectiune cu anexe.
+\input{chapters/appendix.tex}
+
+% Dezvoltarea unei aplicatii in CodeWarrior for MCU
+\input{chapters/bibliography.tex}
+
+% Sfarsitul documentului
+\end{document}
