@@ -54,16 +54,50 @@ O să vedem un pic mai târziu ce face comunitatea oficială pentru a reduce num
 
 \section{Controlul accesului în sistem}
 
-TODO - Aici trebuie să vorbim despre grupurile de utilizatori.
+Accesul în sistem se face prin intermediul unui mecanism simplu de autentificare pe baza unei parole și a unui nume de utilizator. Fiecare membru face parte dintr-un anumit grup de utilizatori și în funcție de grupul din care face parte, are un anumit set de permisiuni.
+
+Grupurile de utilizatori implicite, care sunt create automat o dată cu instalarea platformei, sunt: administratorii, moderatorii, super moderatorii, membrii, vizitatorii și utilizatorii banați. Dintre aceștia doar administratorii au acces implicit la panoul de administrare. Există și noțiunea de super administrator, dacă ar fi să facem o analogie cu un sistem Linux, ar fi un utilizator root. Diferența dintre un simplu administrator și un super admin este constituită în principal din ideea că administratorii simplii nu au dreptul să modifice setul de permisiuni al unui super admin. Tot din motive de securitate, pentru membrii din staff (și anume moderatori, super moderatori și administratori), permisiunile pot fi setate și indivual pentru fiecare membru în parte. Există atât permisiuni la nivel de group cât și permisiuni individuale.
+
+\begin{wrapfigure}{l}{0.5\textwidth}
+    \vspace{-10pt}
+    \center{\includegraphics[width=0.5 \textwidth]{images/groups.png}}
+    \vspace{-20pt}
+    \caption{\label{fig:Policy-Groups} Grupurile preexistente}
+    \vspace{-10pt}
+\end{wrapfigure}
+
+Cu cât sunt mai puțini administratori în sistem cu atât riscul compromiterii unui astfel de cont este mai mic, iar forumul este mai sigur. În plus, fiecare membru din staff ar trebui să primească un număr minimal de permisiuni, strict ceea ce are nevoie pentru a-și desfășura activitatea. Este sugerată aplicarea unei tactici de tipul "divide and conquer" în momentul în care există mai mulți membri în staff. Asta înseamnă că dacă un membru este specializat pe partea de design, atunci acesta ar trebui să primească permisiuni numai la această secțiune, fără a avea acces la setări, utilizatori sau utilitarele de sistem.
+
+Una dintre cele mai importante neajunsuri în ceea ce privește grupurile de utilizatori, o reprezintă faptul că la autentificarea utilizatorului nu se face și o verificare mai amănunțită a IP-ului pe care utilizatorul îl folosește. Nu este corelată zona cu IP-ul folosit. Există o modificare care permite o astfel de corelare, ce are rolul de a bloca utilizatorii care se autentifică azi dintr-o țară (precum România) și după câteva ore din altă țară, dar funcționalitatea nu este implementată direct în core.
 
 \section{Filtrarea informației}
 
-TODO - Aici trebuie să vorbim despre cum este tratată informația din mediul extern. ce se face pentru a evita injectarea de cod?
+Platforma acordă un deosebit interes în filtrarea informațiilor pe care utilizatorul le poate introduce în sistem ca și input. În mod implicit, codul HTML nu este permis în mesajele și subiectele ce sunt publictate în comunitate. Acest lucru este prezent și pentru celelalte formulare pe care platforma le pune la dispoziție. Cu toate acestea, dacă administratorul dorește în mod explicit să permită inserarea de cod HTML în diverse pagini, o poate face prin diferite setări ale aplicației. El trebuie să știe totuși că se predispune la un risc important din punct de vedere al securității.
 
 \section{Sesiuni și parole}
 
-TODO
+Imediat după ce s-a realizat procesul de autentificare, fiecarui utilizator i se creează o sesiune pentru o perioadă de timp, astfel încât la următoarea pagină vizitată să nu mai fie nevoit să se autentifice în sistem, să mai introducă încă o dată credențialele. Perioada de timp poate fi atât temporară cât și pe termen nelimitat. Din motive de securitate evidente, sesiunea este corelată atât cu o serie de informații cu privire la browser-ul pe care îl folosește utilizatorul. Ca și principiu de funcționare, în momentul în care autentificarea s-a realizat cu succes se crează o nouă intrare într-o tabelă cu sesiuni, specificată utilizatorului respectiv pentru o perioadă de timp, după care utilizatorului i se setează un cookie cu câteva informații despre sesiunea respectivă (\textit{uid} și \textit{loginkey}). Sesiunea este ștearsă fie când a expirat, fie când se produce delogarea utilizatorului în mod explicit.
 
-\section{Interacțiunea cu comunitatea oficială - \textit{MyBB.com}}
+\begin{wrapfigure}{l}{0.6\textwidth}
+    \vspace{-10pt}
+    \center{\includegraphics[width=0.6 \textwidth]{images/attempts.png}}
+    \vspace{-20pt}
+    \caption{\label{fig:Policy-FailedAttempts} Blocarea utilizatorului}
+    \vspace{-10pt}
+\end{wrapfigure}
 
-TODO
+Pentru a evita atacurile de tip brute-force, prin incercarea repetată a introducerii unor credențiale, există un mecanism prin care după un anumită de autentificări eșuate utilizatorului nu îi mai este permisă autentificarea. După 10 autentificări consecutive eșuate, utilizatorul este banat timp de 15 minute. Partea ce mai proastă legat de acest mecanism o reprezintă implementarea, care se bazează tot pe cookie-uri. Numărul de autentificări eșuate și data ultimei autentificări de acest gen sunt păstrate în două cookie-uri separate. În acest fel, dacă setăm browser-ul să nu păstreze cookie-urile sau le ștergem după fiecare autentificare eșuată, vom putea trece de acestă barieră.
+
+Pentru accesarea panoului de administrare este necesară o sesiune diferită. Asta înseamnă că o dată ce ne-am autentificat în pagina de index, nu avem acces implicit și la panoul de administrare fără o altă validare a credențialelor. Per total această funcționalitate este bună, prin prisma introducerii unei verificări adiționale. Se putea face ceva mai bine, prin ștergerea sesiunii destinate panoului de administrare de fiecare dată când utilizatorul părăsește panoul de administrare, așa cum se întâmplă la platforma \textit{Woltlab}.
+
+În ceea ce privește procesul de înregistrare, acesta este destul de simplu, neavând condiții foarte complexe pentru setarea acesteia. Condiția implicită pentru declararea unei parole ca fiind acceptată este să aibă minim 6 caractere ca și lungime. Cu toate acestea, platforma pune la dispoziția administratorilor, o setare prin care poate activa verificarea parolei pentru a deveni ceva mai complexă. O dată activată această setare, fiecare parolă ce va fi setată sau schimbată va trebui să aibă cel puțin 6 caractere ca și lungimr, să conțină cel puțin o cifră, o literă mare și una mică.
+
+Ca și un alt fapt divers, platforma presupune că adresa de email a utilizatorului este intangibilă, fiind cel mai important instrument prin care se poate valida autenticitatea unui membru. De aceea, acest instrument este folosit pentru recuperarea parolelor pierdute sau semnarea unor decizii pe care utilizatorul trebuie să le ia în cadrul comunității.
+
+\section{Interacțiunea cu comunitatea oficială}
+
+Comunitatea oficială pune la dispoziția utilizatorilor săi o serie de informații cu privire la modul în care platforma poate fi utilizată, aducând laolaltă toți internauții ce o folosesc pentru propria comunitate. Oamenii găsesc aici tot felul de noutăți, recomandări, tutoriale și articole despre diverse teme cât și o serie de modificări și teme pe care le pot folosi pentru a customiza forumul personal.
+
+Din perspectiva unui developer, adică a unui om ce contribuie la dezvoltarea comunității și a platformei lucrurile stau puțin diferit. Spuneam undeva prin paragrafele anterioare că modificările sunt cele care cresc probabilitatea de a aduce vulnerabilități în propria comunitate. Echipa MyBB a decis să nu oblige administratorii de forumuri să instaleze extensii doar de pe site-ul oficial. Astfel, extensiile (fie că vorbim de modificări sau teme) pot fi instalate și dintr-o sursă locală, prin încărcarea unei arhive pe server. Acest comportament nu este din păcate ideal, pentru că sunt o serie de modificări ce pot fi instalate fără să fie împrealabil verificate de o serie de persoane autorizate. Și nu vorbim de o reacredință din partea contributorilor, doar că există probabilitatea ca cel care a dezvoltat respectivul plugin să nu aibă experiența necesară, să fie începător și să nu ia toate măsurile necesare pentru securitatea extensiei sale.
+
+Din fericire, sistemul implementat pe site-ul oficial permite verificarea materialelor încărcate și testarea minimă a acestora. O dată încărcat un astfel de material, există o serie de utilitare ce verifică fișierele sursă pentru a vedea dacă sunt vulnerabile diferitor tipuri de atacuri, gen SQL Injection sau XSS. Dacă totul este în regulă, o persoană autorizată din echipa se va uita manual peste modificare și va fi cea care va da acceptul final pentru publicarea materialului. De asemenea, un sistem de rating și de raportare a problemelor cu diverse extensii permite rezolvarea rapidă a vulnerabilităților sau dezactivarea extensiei dacă autorul ei nu dorește să fixeze problemele evidențiate de alți utilizatori.
