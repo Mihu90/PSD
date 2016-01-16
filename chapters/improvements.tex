@@ -1,2 +1,31 @@
 \chapter{Îmbunătățiri}
-TODO
+
+O politică de securtitate nu poate proteja niciodată utilizatorii și administratorii de posibile breșe de securitate; asftel se duduce din acest lucru ca unei politici de securitate i se pot aduce oricând îmbunătățiri. Un alt aspect din care este privită o politică de securitate este modul în care vrem să protejeze aplicația noastră: putem dori sa aibă mai puține restricții, dar să ofere mult mai multe facilități care să fie mult mai ușor accesibile sau putem avea o securitate sporită prin care să obligăm utilizatorii si administratorii să realizeze mult mai multe taskuri din punct de vedere al securității și sa aibă mai acces restricționat acolo unde nu este necesar să aibă.
+
+\section{Codul Pin}
+
+O posibilă îmbunătățire adusă în privința panoului de administrare se referă la codul pin. Cu privire la acest cod pin nu există o politică prin care să se reglementeze o anumiă perioada la care acesta să fie schimbat și de asemenea nu există un sistem de notificare pentru schimbarea acestuia. Astfel că o îmbunătățire consta în adăugarea opțiunii de a fi schimbat cel puțin o dată într-o perioadă de minim 1 lună și maxim 3 luni. Un ajutor cu privire la acest aspect ar fi ca înainte cu 10 zile ca pinul să expire administratorului să îi fie trimis un email zilnic prin care să i se reamintească faptul că trebuie să schimbe acest pin. O verificare suplimentară ar fi ca un administrator să nu poată seta acelși pin decât după ce a avut setate alte 5 pinuri diferite. Modul de răspândire al pinului după o schimbare să se realizeze prin email către utilizatorii care au acces la modulele protejate cu ajutorul codului pin. 
+
+Tot referitor la codul pin, atunci când acesta este introdus greșit de cinci ori și parola și username-ul sunt corecte userului să îi fie blocat accesul la panoul de administrare și să ii fie trimis un email de informare administratorului că cineva a încercat să introducă pinul de mai multe ori. Deblocarea accesului utilizatorului la consola de administrare să fie realizată manual de către administrator dupa confirmarea că însăși utilizatorul a introdus codul pin greșit. 
+
+\section{Verificare bazată pe IP}
+
+O verificare importantă cu referire la sistemul de autentificare se referă la faptul că nu poți din punct de vedere fizic acum să te loghezi din România, iar peste două ore să încerci să te loghezi din America, fiind aproape imposibil să ajungi dintr-un loc în altul. O chestie utilă ar fi ca la fiecare autentificare să se facă o verificare de IP pentru a se descoperi zona din care se încearcă logarea în sistem. În caz că zone nu corespunde cu zonele din care s-au realizat ultimele autenficări atunci userul sa fie blocat, iar deblocarea din această stare să se facă printr-un email de confirmare sau prin răaspund la întrebări de securitate.
+
+Un caz în care verificarea pe bază de IP nu este chiar utilă este atunci când încerci să te autentifici dintr-un loc care are drept gateway un server din altă țară, caz în care IP este văzaut ca neaparținînd cu cele uzuale.
+
+\section{Întrebări de verificare}
+
+Schimbarea parolei se poate realiza în acest moment din cont atunci când ești logat cerându-se să se introducă și parola anterioară. O altă metodă pentru schimbarea parolei este prin accesarea featurelui de uitare parolă prin care se cere adresa de email cu care s-a făcut înregistrarea în sistem pentru a putea fi trimisă o nouă parolă utilizatorului. Pentru îmbunătățirea acestui modul ar fi utilă o metodă în plus de verificare și anume verificare prin întrebări de securitate. Astfel atunci cand își crează contul un utilizator să fie nevoit să își seteze două întrebări de securitate la care să știe doar el răspunsul. Acestea ar trebuie să poate fi editate și după crearea contului.
+
+\section{Număr de autentificări greșite}
+
+Când vine vorba de autentificare un utilizator poate greși din neatenție parola sau numele de utilizator de două trei ori. Când se întâmplă lucrul acesta utilizatorul trebuie anunțat cumva și asta s-ar putea realiza prin introducerea unui cod capcha care ar trebui introdus începând cu a cincea încercare de autentificare greșită. Modalitatea în care se depisteaa când un utilizator încearca în mod eronat să se autentifice ar trebui de altfel îmbunătățită. Astfel nu ar trebui salvate în cookieuri numărul de autentificări încercate, ci acestea să se salveze în cadrul forum-ului. Astfel se pot evita cazurile în care utilizatorul șterge cookieurile și astfel face bypass la acest nivel de securitate sau în cazurile cănd browserele sunt setate să nu salveze cookier-uri.
+
+\section{HTML code}
+
+În acest moment inserarea de cod HTML poate fi activată sau dezactivată de către un administrator. Introducerea de cod HTML poate reprezenta o breșă de securitate, iar din această cauză ar trebui limitată activarea/dezactivarea acestei opțiuni: activarea sau dezactivea ei să fie controlată doar de super administrator,astfel respectându-se ideea de cu cât mai puțină lume are acces cu atât mai sigură este.
+
+\section{Valabilitate sesiune}
+
+În ceea ce privește valabilitatea sesiunii unui utilizator ce este administrator și are drept de acces la panoul de control aceasta ar trebui să aibă o limitare. Astfel atunci când un utilizator iese din zona panoului de administrare sesiunea ar trebui să expire, iar la o eventuală revenire să trebuiască să reintroducă datele de autentificare chiar dacă operație de delogare nu s-a făcut explicit.
